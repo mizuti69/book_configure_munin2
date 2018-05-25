@@ -1,1 +1,1 @@
-<img src="styles/generate.png" />
+# Munin 設定手順書
