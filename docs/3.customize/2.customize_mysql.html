@@ -1,0 +1,385 @@
+
+<!DOCTYPE HTML>
+<html lang="ja" >
+    <head>
+        <meta charset="UTF-8">
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <title>MySQL監視プラグインの追加 · GitBook</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="description" content="">
+        <meta name="generator" content="GitBook 3.2.3">
+        
+        
+        
+    
+    <link rel="stylesheet" href="../gitbook/style.css">
+
+    
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-highlight/website.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-search/search.css">
+                
+            
+                
+                <link rel="stylesheet" href="../gitbook/gitbook-plugin-fontsettings/website.css">
+                
+            
+        
+
+    
+
+    
+        
+        <link rel="stylesheet" href="../styles/website.css">
+        
+    
+
+        
+    
+    
+    <meta name="HandheldFriendly" content="true"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="../gitbook/images/apple-touch-icon-precomposed-152.png">
+    <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
+
+    
+    
+    <link rel="prev" href="1.customize_apache.html" />
+    
+
+    </head>
+    <body>
+        
+<div class="book">
+    <div class="book-summary">
+        
+            
+<div id="book-search-input" role="search">
+    <input type="text" placeholder="検索すると入力" />
+</div>
+
+            
+                <nav role="navigation">
+                
+
+
+<ul class="summary">
+    
+    
+
+    
+
+    
+        
+        
+    
+        <li class="chapter " data-level="1.1" data-path="../">
+            
+                <a href="../">
+            
+                    
+                    Introduction
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.2" data-path="../1.install/">
+            
+                <a href="../1.install/">
+            
+                    
+                    Muninの導入
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.2.1" data-path="../1.install/1.install_munin.html">
+            
+                <a href="../1.install/1.install_munin.html">
+            
+                    
+                    Muninのインストール
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3" data-path="../2.configure/">
+            
+                <a href="../2.configure/">
+            
+                    
+                    Muninの設定
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.3.1" data-path="../2.configure/1.configure_client.html">
+            
+                <a href="../2.configure/1.configure_client.html">
+            
+                    
+                    Muninクライアントの設定
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.2" data-path="../2.configure/2.configure_service.md">
+            
+                <span>
+            
+                    
+                    Muninサーバの設定
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter " data-level="1.3.3" data-path="../2.configure/3.configure_apache.html">
+            
+                <a href="../2.configure/3.configure_apache.html">
+            
+                    
+                    リソース画面の設定
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+        <li class="chapter " data-level="1.4" data-path="./">
+            
+                <a href="./">
+            
+                    
+                    プラグインのカスタマイズ
+            
+                </a>
+            
+
+            
+            <ul class="articles">
+                
+    
+        <li class="chapter " data-level="1.4.1" data-path="1.customize_apache.html">
+            
+                <a href="1.customize_apache.html">
+            
+                    
+                    Apache監視プラグインの追加
+            
+                </a>
+            
+
+            
+        </li>
+    
+        <li class="chapter active" data-level="1.4.2" data-path="2.customize_mysql.html">
+            
+                <a href="2.customize_mysql.html">
+            
+                    
+                    MySQL監視プラグインの追加
+            
+                </a>
+            
+
+            
+        </li>
+    
+
+            </ul>
+            
+        </li>
+    
+
+    
+
+    <li class="divider"></li>
+
+    <li>
+        <a href="https://www.gitbook.com" target="blank" class="gitbook-link">
+            GitBookで公開 
+        </a>
+    </li>
+</ul>
+
+
+                </nav>
+            
+        
+    </div>
+
+    <div class="book-body">
+        
+            <div class="body-inner">
+                
+                    
+
+<div class="book-header" role="navigation">
+    
+
+    <!-- Title -->
+    <h1>
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <a href=".." >MySQL監視プラグインの追加</a>
+    </h1>
+</div>
+
+
+
+
+                    <div class="page-wrapper" tabindex="-1" role="main">
+                        <div class="page-inner">
+                            
+<div id="book-search-results">
+    <div class="search-noresults">
+    
+                                <section class="normal markdown-section">
+                                
+                                <h1 id="mysql&#x76E3;&#x8996;&#x30D7;&#x30E9;&#x30B0;&#x30A4;&#x30F3;&#x306E;&#x8FFD;&#x52A0;">MySQL&#x76E3;&#x8996;&#x30D7;&#x30E9;&#x30B0;&#x30A4;&#x30F3;&#x306E;&#x8FFD;&#x52A0;</h1>
+<p>&#x203B;RDS&#x3067;&#x306F;&#x4E0A;&#x624B;&#x304F;&#x53D6;&#x5F97;&#x3067;&#x304D;&#x306A;&#x3044;&#x5834;&#x5408;&#x304C;&#x3042;&#x308B;  </p>
+<h2 id="&#x30D7;&#x30E9;&#x30B0;&#x30A4;&#x30F3;&#x306E;&#x8FFD;&#x52A0;">&#x30D7;&#x30E9;&#x30B0;&#x30A4;&#x30F3;&#x306E;&#x8FFD;&#x52A0;</h2>
+<p>mysql&#x7528;&#x30D7;&#x30E9;&#x30B0;&#x30A4;&#x30F3;&#x306F;&#x30C7;&#x30D5;&#x30A9;&#x30EB;&#x30C8;&#x3067;&#x7528;&#x610F;&#x3055;&#x308C;&#x3066;&#x3044;&#x308B;&#x3082;&#x306E;&#x3092;&#x5229;&#x7528;&#x3057;&#x307E;&#x3059;&#x3002;  </p>
+<pre><code># cd /etc/munin/plugins
+# ln -s /usr/share/munin/plugins/mysql_ ./mysql_commands
+# ln -s /usr/share/munin/plugins/mysql_ ./mysql_connections
+# ln -s /usr/share/munin/plugins/mysql_ ./mysql_innodb_bpool
+# ln -s /usr/share/munin/plugins/mysql_ ./mysql_select_types
+# ln -s /usr/share/munin/plugins/mysql_ ./mysql_slow
+# ln -s /usr/share/munin/plugins/mysql_ ./mysql_qcache
+# ln -s /usr/share/munin/plugins/mysql_ ./mysql_qcache_mem
+# ln -s /usr/share/munin/plugins/mysql_ ./mysql_sorts
+# ln -s /usr/share/munin/plugins/mysql_ ./mysql_table_locks
+</code></pre><p>&#x203B;&#x5229;&#x7528;&#x3059;&#x308B;mysql&#x306B;&#x3088;&#x3063;&#x3066;&#x306F;&#x4E0A;&#x624B;&#x304F;&#x5024;&#x3092;&#x53D6;&#x5F97;&#x3067;&#x304D;&#x306A;&#x3044;&#x30D7;&#x30E9;&#x30B0;&#x30A4;&#x30F3;&#x304C;&#x3042;&#x308A;&#x307E;&#x3059;&#x3002;  </p>
+<p>&#x30D7;&#x30E9;&#x30B0;&#x30A4;&#x30F3;&#x306B;&#x5FC5;&#x8981;&#x306A;&#x30D1;&#x30C3;&#x30B1;&#x30FC;&#x30B8;&#x306E;&#x8FFD;&#x52A0;&#x30A4;&#x30F3;&#x30B9;&#x30C8;&#x30FC;&#x30EB;  </p>
+<pre><code># yum install --enablerepo=epel perl-Cache-Cache perl-IPC-ShareLite perl-DBD-MySQL
+</code></pre><h2 id="mysql&#x306E;&#x8A2D;&#x5B9A;">MySQL&#x306E;&#x8A2D;&#x5B9A;</h2>
+<p>&#x30D7;&#x30E9;&#x30B0;&#x30A4;&#x30F3;&#x304C;mysql&#x306B;&#x30ED;&#x30B0;&#x30A4;&#x30F3;&#x3057;&#x3001;&#x30D1;&#x30D5;&#x30A9;&#x30FC;&#x30DE;&#x30F3;&#x30B9;&#x60C5;&#x5831;&#x3092;&#x53D6;&#x5F97;&#x3067;&#x304D;&#x308B;&#x3088;&#x3046;&#x6A29;&#x9650;&#x3092;&#x4ED8;&#x4E0E;&#x3057;&#x307E;&#x3059;  </p>
+<pre><code class="lang-sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">USER</span> munin@localhost <span class="hljs-keyword">IDENTIFIED</span> <span class="hljs-keyword">BY</span> <span class="hljs-string">&apos;&#x30D1;&#x30B9;&#x30EF;&#x30FC;&#x30C9;&apos;</span>;
+<span class="hljs-keyword">GRANT</span> SUPER, <span class="hljs-keyword">SELECT</span>, PROCESS, <span class="hljs-keyword">REFERENCES</span>, <span class="hljs-keyword">INDEX</span>, <span class="hljs-keyword">SHOW</span> <span class="hljs-keyword">DATABASES</span>, <span class="hljs-keyword">LOCK</span> <span class="hljs-keyword">TABLES</span>, <span class="hljs-keyword">EXECUTE</span>, <span class="hljs-keyword">REPLICATION</span> <span class="hljs-keyword">SLAVE</span>, <span class="hljs-keyword">REPLICATION</span> <span class="hljs-keyword">CLIENT</span>, <span class="hljs-keyword">SHOW</span> <span class="hljs-keyword">VIEW</span>, <span class="hljs-keyword">EVENT</span>, <span class="hljs-keyword">TRIGGER</span> <span class="hljs-keyword">ON</span> *.* <span class="hljs-keyword">TO</span> <span class="hljs-string">&apos;munin&apos;</span>@<span class="hljs-string">&apos;localhost&apos;</span>;
+</code></pre>
+<h2 id="&#x30D7;&#x30E9;&#x30B0;&#x30A4;&#x30F3;&#x306E;&#x8A2D;&#x5B9A;">&#x30D7;&#x30E9;&#x30B0;&#x30A4;&#x30F3;&#x306E;&#x8A2D;&#x5B9A;</h2>
+<p>mysql&#x3078;&#x306E;&#x63A5;&#x7D9A;&#x65B9;&#x6CD5;&#x3092;&#x5B9A;&#x7FA9;&#x3057;&#x307E;&#x3059;&#x3002;  </p>
+<pre><code># vim /etc/munin/plugin-conf.d/munin-node
+[mysql_*]
+env.mysqlconnection DBI:mysql:mysql;host=localhost;port=3306;mysql_socket=/var/lib/mysql/mysql.sock
+env.mysqluser munin
+env.mysqlpassword password
+</code></pre><h2 id="&#x30D7;&#x30E9;&#x30B0;&#x30A4;&#x30F3;&#x306E;&#x6709;&#x52B9;&#x5316;">&#x30D7;&#x30E9;&#x30B0;&#x30A4;&#x30F3;&#x306E;&#x6709;&#x52B9;&#x5316;</h2>
+<p>&#x30D7;&#x30E9;&#x30B0;&#x30A4;&#x30F3;&#x306E;&#x52D5;&#x4F5C;&#x78BA;&#x8A8D;  </p>
+<pre><code># cd /etc/munin/plugins
+# munin-run mysql_connections
+</code></pre><p><code>xxxxx.value  1234</code>&#x306E;&#x3088;&#x3046;&#x306B;&#x5024;&#x304C;&#x53D6;&#x5F97;&#x3067;&#x304D;&#x3066;&#x3044;&#x308C;&#x3070;&#x6210;&#x529F;<br>&#x6700;&#x5F8C;&#x306B;&#x30B5;&#x30FC;&#x30D3;&#x30B9;&#x3092;&#x518D;&#x8D77;&#x52D5;&#x3057;&#x3066;&#x6709;&#x52B9;&#x5316;  </p>
+<pre><code># systemctl restart munin-node
+</code></pre>
+                                
+                                </section>
+                            
+    </div>
+    <div class="search-results">
+        <div class="has-results">
+            
+            <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+            <ul class="search-results-list"></ul>
+            
+        </div>
+        <div class="no-results">
+            
+            <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+            
+        </div>
+    </div>
+</div>
+
+                        </div>
+                    </div>
+                
+            </div>
+
+            
+                
+                <a href="1.customize_apache.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: Apache監視プラグインの追加">
+                    <i class="fa fa-angle-left"></i>
+                </a>
+                
+                
+            
+        
+    </div>
+
+    <script>
+        var gitbook = gitbook || [];
+        gitbook.push(function() {
+            gitbook.page.hasChanged({"page":{"title":"MySQL監視プラグインの追加","level":"1.4.2","depth":2,"previous":{"title":"Apache監視プラグインの追加","level":"1.4.1","depth":2,"path":"3.customize/1.customize_apache.md","ref":"3.customize/1.customize_apache.md","articles":[]},"dir":"ltr"},"config":{"plugins":[],"styles":{"website":"styles/website.css"},"pluginsConfig":{"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"theme":"default","pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"variables":{},"language":"ja","gitbook":"*"},"file":{"path":"3.customize/2.customize_mysql.md","mtime":"2018-05-25T07:11:19.173Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2018-05-25T07:20:51.341Z"},"basePath":"..","book":{"language":""}});
+        });
+    </script>
+</div>
+
+        
+    <script src="../gitbook/gitbook.js"></script>
+    <script src="../gitbook/theme.js"></script>
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search-engine.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-search/search.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/lunr.min.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-lunr/search-lunr.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-sharing/buttons.js"></script>
+        
+    
+        
+        <script src="../gitbook/gitbook-plugin-fontsettings/fontsettings.js"></script>
+        
+    
+
+    </body>
+</html>
+
