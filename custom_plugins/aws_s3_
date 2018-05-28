@@ -1,0 +1,64 @@
+#!/bin/bash
+#
+# README
+# ===========================================
+#
+ 
+#
+# Export
+# -------------------------------------------
+REGION=${REGION:-ap-northeast-1}
+BUCKET_TARGET=$(/bin/basename "$0" |/bin/awk -F '_' '{print $NF}')
+ 
+# Graph Setting
+# -------------------------------------------
+. "$MUNIN_LIBDIR"/plugins/plugin.sh
+ 
+if [ "$1" = "autoconf" ]; then
+  echo yes
+  exit 0
+fi
+ 
+if [ "$1" = "config" ]; then
+ 
+  # Graph set
+  echo "graph_title S3 $BUCKET_TARGET Bucket"
+  echo 'graph_args --base 1024 -l 0'
+  echo 'graph_vlabel S3 Bucket Size'
+  echo 'graph_info This graph S3 Bucket Size.'
+  echo 'graph_category s3'
+ 
+  # Lavel set
+  echo 'objects.label bucket objects'
+  echo 'objects.draw LINE1'
+  echo 'objects.min 0'
+  echo 'objects.type GAUGE'
+  echo "objects.info bucket objects count."
+ 
+  echo 'size.label bucket size'
+  echo 'size.draw LINE1'
+  echo 'size.min 0'
+  echo 'size.type GAUGE'
+  echo "size.info bucket size byte."
+ 
+  exit 0
+fi
+ 
+# Get parameter
+# -------------------------------------------
+TOTAL_OBJECT=$(aws s3 ls s3://$BUCKET_TARGET --recursive --summarize |awk '/Total Objects/{print $3}')
+TOTAL_SIZE=$(aws s3 ls s3://$BUCKET_TARGET --recursive --summarize |awk '/Total Size/{print $3}' )
+ 
+if [ ! -z "$TOTAL_OBJECT" ]; then
+  echo "objects.value $TOTAL_OBJECT"
+else
+  echo "objects.value "
+  exit 0
+fi
+ 
+if [ ! -z "$TOTAL_SIZE" ]; then
+  echo "size.value $TOTAL_SIZE"
+else
+  echo ""size.value ""
+  exit 0
+fi

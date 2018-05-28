@@ -1,0 +1,150 @@
+#!/bin/bash
+#
+# README
+# ===========================================
+# This plugin is Jstat status check for JAVA8
+#
+# Set export JAVA Options
+# ---
+# JAVA_HOME    : install java path
+# JSTAT_TARGET : java process target
+# JSTAT_OPTION : jstat command option
+#
+#
+# Plugin config
+# ---
+#
+# ```
+# # vim plugin-conf.d/munin-node
+# [jstat_*]
+#  user root
+# ```
+#
+# Example 1
+# ---
+# JDK1.8_31 ~ JDK1.8_8X Bug
+# this version is jstat do not move
+#
+#
+# Example 2
+# ---
+# Redhat/CentOS 7 over
+#
+# change service unit settings
+#
+# ```
+# # vim /etc/systemd/system/multi-user.target.wants/munin-node.service
+# PrivateTmp=false
+# ```
+#
+# ```
+# # systemctl daemon-reload
+# # systemctl restart munin-node.service
+# ```
+#
+ 
+# Export
+# -------------------------------------------
+JAVA_HOME=""
+JSTAT_TARGET=`/bin/basename "$0" |awk -F\_ '{print $NF}'`
+JSTAT_OPTIONS="-gcutil"
+ 
+# Check
+# -------------------------------------------
+ 
+# java check
+CHECK_VERSION=$($JAVA_HOME/bin/java -version 2>&1 |awk -F\" 'NR==1{print $2}' |cut -d'_' -f 1)
+if [ ! "$CHECK_VERSION" = "1.8.0" ]; then
+  echo "Use java version JAVA(8) ?"
+  exit 0
+fi
+ 
+# Graph
+# -------------------------------------------
+. "$MUNIN_LIBDIR"/plugins/plugin.sh
+ 
+if [ "$1" = "autoconf" ]; then
+  echo yes
+  exit 0
+fi
+ 
+if [ "$1" = "config" ]; then
+ 
+  # Graph set
+  echo "graph_title $JSTAT_TARGET JAVA Heap Memory Use"
+  echo 'graph_args --base 1000 -l 0 --upper-limit 500'
+  echo 'graph_vlabel Java Server Memory Use [%]'
+  echo 'graph_category java'
+  echo 'graph_info This graph JAVA Heap Memory.'
+ 
+  # Lavel set
+  echo 'SRV0.label Survive0'
+  echo "SRV0.info Survive0 space usage [%]."
+  echo 'SRV0.type GAUGE'
+  echo 'SRV0.min 0'
+  echo 'SRV0.draw AREA'
+  echo 'SRV0.colour 00FF00'  # green
+ 
+  echo 'SRV1.label Survive1'
+  echo "SRV1.info Survive1 space usage [%]."
+  echo 'SRV1.type GAUGE'
+  echo 'SRV1.min 0'
+  echo 'SRV1.draw STACK'
+  echo 'SRV1.colour BFFF00'  # yellow green
+ 
+  echo 'EDEN.label Eden'
+  echo "EDEN.info Eden space usage [%]."
+  echo 'EDEN.type GAUGE'
+  echo 'EDEN.min 0'
+  echo 'EDEN.draw STACK'
+  echo 'EDEN.colour FFBF00'  # orange
+ 
+  echo 'OLD.label Old'
+  echo "OLD.info Old space usage [%]."
+  echo 'OLD.type GAUGE'
+  echo 'OLD.min 0'
+  echo 'OLD.draw STACK'
+  echo 'OLD.colour BDBDBD'  # gray
+ 
+  echo 'META.label Metaspacce'
+  echo "META.info Metaspace space usage [%]."
+  echo 'META.type GAUGE'
+  echo 'META.min 0'
+  echo 'META.draw STACK'
+  echo 'META.colour 00BFFF'  # bule
+ 
+  exit 0
+fi
+ 
+# Get parameter
+# -------------------------------------------
+JAVA_JPS=$($JAVA_HOME/bin/jps -v |awk '/'"$JSTAT_TARGET"'/{print $1}')
+ 
+if [ -z "$JAVA_JPS" ]; then
+  echo "SRV0.value "
+  echo "SRV1.value "
+  echo "EDEN.value "
+  echo "OLD.value "
+  echo "META.value "
+  exit 0
+fi
+ 
+JAVA_JSTAT=$($JAVA_HOME/bin/jstat "$JSTAT_OPTIONS" -t "$JAVA_JPS" 1 1)
+ 
+if [ -z "$JAVA_JSTAT" ]; then
+  echo "SRV0.value 0"
+  echo "SRV1.value 0"
+  echo "EDEN.value 0"
+  echo "OLD.value 0"
+  echo "META.value 0"
+  exit 0
+fi
+ 
+echo "$JAVA_JSTAT" | /bin/awk \
+'NR==2{
+  print "SRV0.value "  $2; \
+  print "SRV1.value " $3; \
+  print "EDEN.value " $4; \
+  print "OLD.value " $5; \
+  print "META.value " $6; \
+}'

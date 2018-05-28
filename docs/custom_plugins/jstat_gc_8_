@@ -1,0 +1,136 @@
+#!/bin/bash
+#
+# README
+# ===========================================
+# This plugin is Jstat status check for JAVA8
+#
+# Set export JAVA Options
+# ---
+# JAVA_HOME    : install java path
+# JSTAT_TARGET : java process target
+# JSTAT_OPTION : jstat command option
+#
+#
+# Plugin config
+# ---
+#
+# ```
+# # vim plugin-conf.d/munin-node
+# [jstat_*]
+#  user root
+# ```
+#
+# Example 1
+# ---
+# JDK1.8_31 ~ JDK1.8_8X Bug
+# this version is jstat do not move
+#
+#
+# Example 2
+# ---
+# Redhat/CentOS 7 over
+#
+# change service unit settings
+#
+# ```
+# # vim /etc/systemd/system/multi-user.target.wants/munin-node.service
+# PrivateTmp=false
+# ```
+#
+# ```
+# # systemctl daemon-reload
+# # systemctl restart munin-node.service
+# ```
+#
+ 
+# Export
+# -------------------------------------------
+JAVA_HOME=""
+JSTAT_TARGET=$(/bin/basename "$0" |/bin/awk -F '_' '{print $NF}')
+JSTAT_OPTION="-gcutil"
+ 
+# Check
+# -------------------------------------------
+ 
+# java check
+CHECK_VERSION=$($JAVA_HOME/bin/java -version 2>&1 |awk -F\" 'NR==1{print $2}' |cut -d'_' -f 1)
+if [ ! "$CHECK_VERSION" = "1.8.0" ]; then
+  echo "Use java version JAVA(8) ?"
+  exit 0
+fi
+ 
+# Graph Setting
+# -------------------------------------------
+. "$MUNIN_LIBDIR"/plugins/plugin.sh
+ 
+if [ "$1" = "autoconf" ]; then
+  echo yes
+  exit 0
+fi
+ 
+if [ "$1" = "config" ]; then
+ 
+  # Graph set
+  echo "graph_title $JSTAT_TARGET JAVA GC Count"
+  echo 'graph_args --base 1000 -l 0'
+  echo 'graph_vlabel Java Server Gc Count'
+  echo 'graph_info This graph JAVA GC.'
+  echo 'graph_category java'
+ 
+  # Lavel set
+  echo 'YGC.label YGC'
+  echo 'YGC.draw LINE1'
+  echo 'YGC.min 0'
+  echo 'YGC.type DERIVE'
+  echo "YGC.info YoungGC invent count."
+ 
+  echo 'YGCT.label YGCT'
+  echo 'YGCT.draw LINE1'
+  echo 'YGCT.min 0'
+  echo 'YGCT.type DERIVE'
+  echo "YGCT.info YoungGC invent time."
+ 
+  echo 'FGC.label FGC'
+  echo 'FGC.draw LINE1'
+  echo 'FGC.min 0'
+  echo 'FGC.type DERIVE'
+  echo "FGC.info FullGC invent count."
+ 
+  echo 'FGCT.label FGCT'
+  echo 'FGCT.draw LINE1'
+  echo 'FGCT.min 0'
+  echo 'FGCT.type DERIVE'
+  echo "FGCT.info FullGC invent time."
+ 
+  exit 0
+fi
+ 
+# Get parameter
+# -------------------------------------------
+JAVA_JPS=$(${JAVA_HOME}/bin/jps -v |awk '/'"$JSTAT_TARGET"'/{print $1}')
+ 
+if [ -z "$JAVA_JPS" ]; then
+  echo "YGC.value "
+  echo "FGC.value "
+  echo "YGCT.value "
+  echo "FGCT.value "
+  exit 0
+fi
+ 
+JAVA_JSTAT=$(${JAVA_HOME}/bin/jstat "$JSTAT_OPTION" -t "$JAVA_JPS" 1 1)
+ 
+if [ -z "$JAVA_JSTAT" ]; then
+  echo "YGC.value 0"
+  echo "FGC.value 0"
+  echo "YGCT.value 0"
+  echo "FGCT.value 0"
+  exit 0
+fi
+ 
+echo "$JAVA_JSTAT" | /bin/awk \
+'NR==2{
+  print "YGC.value " $8; \
+  print "YGCT.value " $9; \
+  print "FGC.value " $10; \
+  print "FGCT.value " $11; \
+}'
